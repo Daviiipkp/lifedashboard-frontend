@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Gemstones&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+@theme {
+  --font-gemstone: "Rubik Gemstones", system-ui, sans-serif;
+  --font-oswald: "Oswald", system-ui, sans-serif;
+}
+
+body {
+    background-image: url('/background-login.jpg');
+    @apply bg-no-repeat bg-cover bg-center min-h-screen;
+    color: #ffffff;
+}
