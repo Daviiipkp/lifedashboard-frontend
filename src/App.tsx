@@ -5,19 +5,18 @@ import { useAuth } from "./contexts/AuthContext";
 import type { ReactNode } from "react";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Register } from "./pages/register";
-import { NavigationBar } from "./components/NavigationBar";
 
 
 function PrivateRoute({ children }: { children: ReactNode }) {
   const { authState , loading} = useAuth();
-
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!authState.isAuthenticated) {
-    return <Navigate to="/" />;
-  }
+  // if (!authState.isAuthenticated) {
+  //   return <Navigate to="/" />;
+  // }
+  //CHANGE THIS!
 
   return children;
 }

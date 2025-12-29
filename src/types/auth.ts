@@ -30,7 +30,6 @@ export interface AuthContextType {
     login: (credentials: LoginCredentials) => Promise<void>;
     register: (credentials: RegisterCredentials) => Promise<void>;
     logout: () => void;
-
     loading: boolean;
 }
 
