@@ -5,25 +5,27 @@ import { useAuth } from "./contexts/AuthContext";
 import type { ReactNode } from "react";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Register } from "./pages/register";
+import Logout from "./components/Logout";
+import { ErrorPage } from "./pages/error";
+import { LoadingPage } from "./pages/loading";
 
 
-function PrivateRoute({ children }: { children: ReactNode }) {
+function PrivateRoute({children}: { children: ReactNode }) {
   const { authState , loading} = useAuth();
   if (loading) {
-    return <div>Loading...</div>;
+    return LoadingPage();
   }
 
-  // if (!authState.isAuthenticated) {
-  //   return <Navigate to="/" />;
-  // }
-  //CHANGE THIS!
+  if (!authState.isAuthenticated) {
+    return <Navigate to="/login"/>;
+  }
 
   return children;
 }
 
 function App() {
-  const { authState } = useAuth();
-
+  const { authState} = useAuth();
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -34,6 +36,8 @@ function App() {
         <Route path="/login" element={authState.isAuthenticated ? <Navigate to="/dashboard" /> : <Login/>}  />
         <Route path="/register" element={authState.isAuthenticated ? <Navigate to="/dashboard" /> : <Register/>}  />
         <Route path="/verify" element={<VerifyEmail/>} />
+        <Route path="/logout" element = {<Logout/>}/>
+        <Route path="/error" element = {<ErrorPage/>}/>
         {}
         <Route 
           path="/dashboard" 

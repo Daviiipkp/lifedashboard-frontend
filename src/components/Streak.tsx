@@ -4,18 +4,18 @@ import React, { useEffect, useState, useRef } from 'react';
 // 1. TYPES & ICONS
 // ==========================================
 
-export type StreakActivity = 
+export type DefaultStreak = 
   | "sleep" | "wakeUpTime" | "workedOut" | "focus" | "water"
   | "reading" | "studying" | "meals" | "detox"
   | "planning" | "leetCodeSolved" | "duoSolved";
 
-interface StreakWidgetProps {
-  type: StreakActivity;
+export interface StreakWidgetProps {
+  type: DefaultStreak | string;
   count: number;
   completedToday: boolean;
 }
 
-const ICONS: Record<StreakActivity, React.ReactNode> = {
+const ICONS: Record<DefaultStreak|string, React.ReactNode> = {
   sleep: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
   wakeUpTime: <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />,
   workedOut: <path d="M6.5 6.5l11 11M21 21l-1-1M3 3l1 1M18 6L6 18M21 3l-1 1M3 21l1-1" />,

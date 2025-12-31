@@ -3,6 +3,7 @@ import type { AuthContextType, LoginCredentials, RegisterCredentials, AuthState,
 import { authService } from "../services/authService";
 import { api } from "../services/api";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -13,10 +14,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     function loadStorageData() {
         const storagedToken = localStorage.getItem('@Aequo:token');
         const storagedUser = localStorage.getItem('@Aequo:user');
-
-        if (storagedToken && storagedUser) {
+        if ((storagedToken && storagedUser) && storagedToken !== "null" && storagedUser !== "null") {
             api.defaults.headers.common['Authorization'] = `Bearer ${storagedToken}`;
-            
             setAuthState({
                 isAuthenticated: true,
                 user: JSON.parse(storagedUser),
@@ -83,6 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     function logout() {
+        window.location.href = '/login';
         setAuthState({ isAuthenticated: false, user: undefined });
         api.defaults.headers.common['Authorization'] = undefined;
         localStorage.setItem('@Aequo:token', null as any);
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ authState, login, register, logout, loading}}>
+        <AuthContext.Provider value={{authState, login, register, logout, loading, setLoading}}>
             {children}
         </AuthContext.Provider>
     );

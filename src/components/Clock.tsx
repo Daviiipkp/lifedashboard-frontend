@@ -50,7 +50,7 @@ const DigitalClock = () => {
 
   return (
     // border-gray-700 bg-gray-900/40 border
-      <div className="relative w-fit flex-col gap-3 sm:gap-4 rounded-3xl p-3 backdrop-blur-xl sm:p-2">
+      <div className="bg-black self-center relative w-fit flex-col gap-3 sm:gap-4 rounded-3xl p-3 backdrop-blur-xl sm:p-2">
         <div className="flex p-3 sm:p-5 items-center gap-4 sm:gap-4 align-middle justify-center">
             <TimeCard value={formatNumber(time.getHours())} label="Hours" />
             <Separator />
