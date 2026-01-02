@@ -3,7 +3,7 @@ import type { StreaksData } from "../types/general";
 import { useAuth } from "../contexts/AuthContext";
 
 export const api = axios.create({
-  baseURL: "http://localhost:8080", 
+  baseURL: "http://192.168.0.9:8080", 
   timeout: 5000,
 });
 api.interceptors.request.use((config) => {

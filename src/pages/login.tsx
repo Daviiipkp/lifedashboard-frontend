@@ -31,7 +31,8 @@ export function Login() {
         navigate("/dashboard");
       } catch (error: any) {
         setLoading(false);
-        setErrorMsg(error.response.data.message || "Error during login.");
+        try{setErrorMsg(error.response.data.message || "Error during login.");} catch {setErrorMsg("Error during login. Contact website Administrator");}
+        
         setTimeout(() => {
             setErrorMsg(null);
         }, 3000);

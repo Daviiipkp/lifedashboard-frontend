@@ -8,48 +8,63 @@ import { Register } from "./pages/register";
 import Logout from "./components/Logout";
 import { ErrorPage } from "./pages/error";
 import { LoadingPage } from "./pages/loading";
+import { Log } from "./pages/log";
 
-
-function PrivateRoute({children}: { children: ReactNode }) {
-  const { authState , loading} = useAuth();
+function PrivateRoute({ children }: { children: ReactNode }) {
+  const { authState, loading } = useAuth();
   if (loading) {
-    return LoadingPage();
+    return <LoadingPage />;
   }
 
   if (!authState.isAuthenticated) {
-    return <Navigate to="/login"/>;
+    return <Navigate to="/login" />;
   }
 
   return children;
 }
 
 function App() {
-  const { authState} = useAuth();
-  
+  const { authState } = useAuth();
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route 
-          path="/" 
-          element={authState.isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
-        />
-        <Route path="/login" element={authState.isAuthenticated ? <Navigate to="/dashboard" /> : <Login/>}  />
-        <Route path="/register" element={authState.isAuthenticated ? <Navigate to="/dashboard" /> : <Register/>}  />
-        <Route path="/verify" element={<VerifyEmail/>} />
-        <Route path="/logout" element = {<Logout/>}/>
-        <Route path="/error" element = {<ErrorPage/>}/>
-        {}
-        <Route 
-          path="/dashboard" 
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          } 
-        />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          authState.isAuthenticated ? (
+            <Navigate to="/dashboard" />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          authState.isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          authState.isAuthenticated ? (
+            <Navigate to="/dashboard" />
+          ) : (
+            <Register />
+          )
+        }
+      />
+      <Route path="/verify" element={<VerifyEmail />} />
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/error" element={<ErrorPage />} />
+      {}
+      <Route path="/log" element={<PrivateRoute children={<Log />} />} />
+      <Route
+        path="/dashboard"
+        element={<PrivateRoute children={<Dashboard />} />}
+      />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
 
