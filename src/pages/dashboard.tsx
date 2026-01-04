@@ -12,6 +12,7 @@ import { LoadingPage } from "./loading";
 import { IoAnalytics, IoAnalyticsSharp } from "react-icons/io5";
 import { GiObservatory } from "react-icons/gi";
 import { BiDownArrow } from "react-icons/bi";
+import { useContent } from "../contexts/ContentContext";
 
 function getHalfStreaks(strData: StreaksData, second?: boolean) {
   const { handleError } = useError();
@@ -35,6 +36,7 @@ export function Dashboard() {
   const { authState, setLoading } = useAuth();
   const user = authState.user;
   const { handleError } = useError();
+  const { waitForStreaks } = useContent();
 
   const [planning, setPlanning] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -47,7 +49,7 @@ export function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await api.get<StreaksData>("/api/streaksdata");
+        const { data } = await waitForStreaks();
         setStreakData(data);
       } catch (error) {
         handleError(error);

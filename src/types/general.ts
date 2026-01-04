@@ -14,6 +14,7 @@ export interface DailyData {
     planning: string;
     defaultHabitsDone: string[];
     dailyInsight: string;
+    dailyLogged: DailyLog;
 }
 
 export interface DailyLog {
@@ -26,9 +27,6 @@ export interface DailyLog {
     reading?: number;
     studying?: number;
     focusLevel?: number;
-    leetCodeSolved?: number;
-    duoSolved?: number;
-    
 }
 
 export interface HabitsConfig {
@@ -42,7 +40,7 @@ export interface HabitsConfig {
     detox?: boolean;
 }
 
-export interface pertinentData {
+export interface PertinentData {
     goals: Goal[];
     calendar: CalendarData;
     streaks: StreakWidgetProps[];
