@@ -27,7 +27,7 @@ import { GiObservatory } from "react-icons/gi";
 import { BiDownArrow } from "react-icons/bi";
 import { useContent } from "../contexts/ContentContext";
 import GoalWidget from "../components/goalwidget";
-import Calendarr from "../components/calendar";
+import Calendarr from "../components/Calendar";
 import DailyAnalysis from "../components/DailyAnalysis";
 
 function getHalfStreaks(strData?: StreaksData, second?: boolean) {
