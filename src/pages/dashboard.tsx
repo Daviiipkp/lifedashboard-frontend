@@ -43,6 +43,7 @@ function getHalfStreaks(strData?: StreaksData, second?: boolean) {
       strData?.streaks.length / 2,
       strData?.streaks.length
     );
+    //
   } catch (error) {
     handleError(error);
   }
