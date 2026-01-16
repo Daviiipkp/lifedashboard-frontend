@@ -12,9 +12,8 @@ export interface UserData {
 
 export interface DailyData {
     planning: string;
-    defaultHabitsDone: string[];
     dailyInsight: string;
-    dailyLogged: DailyLog;
+    dailyLogged?: DailyLog;
 }
 
 export interface DailyLog {
@@ -27,6 +26,7 @@ export interface DailyLog {
     reading?: number;
     studying?: number;
     focusLevel?: number;
+    working?: number;
 }
 
 export interface HabitsConfig {
@@ -36,14 +36,14 @@ export interface HabitsConfig {
     readingGoal?: number;
     studyingGoal?: number;
     mealsPerDayGoal?: number;
-    weekTrainingDays: number;
+    weekTrainingDays?: number;
     detox?: boolean;
 }
 
 export interface PertinentData {
     goals: Goal[];
     calendar: CalendarData;
-    streaks: StreakWidgetProps[];
+    config: HabitsConfig
 }
 
 export interface StreaksData {
@@ -66,7 +66,7 @@ export interface CustomHabit {
 
 export interface Goal {
     name: string;
-    target: number | boolean;
+    target: string;
     progress: number;
     unit: string;
 }

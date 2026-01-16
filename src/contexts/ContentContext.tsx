@@ -8,16 +8,14 @@ import type {
 } from "../types/general";
 import { api } from "../services/api";
 import type { AxiosResponse } from "axios";
+import { useAuth } from "./AuthContext";
 
 interface ContentData {
-  streaks: StreaksData | any;
-  pertinentData: PertinentData | any;
-  habitsCfg: HabitsConfig | any;
-  dailyData: DailyData | any;
-  refreshConfig: () => void;
-
-  waitForStreaks: () => Promise<AxiosResponse<StreaksData, any, {}>>;
-  waitForLog: () => Promise<AxiosResponse<DailyLog, any, {}>>;
+  waitForStreaks?: () => Promise<AxiosResponse<StreaksData, any, {}>>;
+  waitForLog?: () => Promise<AxiosResponse<DailyLog, any, {}>>;
+  waitForDailyData?: () => Promise<AxiosResponse<DailyData, any, {}>>;
+  waitForPertinentData?: () => Promise<AxiosResponse<PertinentData, any, {}>>;
+  saveLog?: (dl: DailyLog) => Promise<AxiosResponse<StreaksData, any, {}>>;
 }
 
 const ContentContext = createContext<ContentData | undefined>(undefined);
@@ -27,37 +25,42 @@ export const ContentProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  let streaks = api.get<StreaksData>("/api/streaksdata");
-  let pertinentData = api.get<PertinentData>("/api/pertinentData");
-  let habitsCfg = api.get<HabitsConfig>("/api/habitscfg");
-  let dailyData = api.get<DailyData>("/api/dailydata");
-  const refreshConfig = () => {
-    streaks = api.get<StreaksData>("/api/streaksdata");
-    pertinentData = api.get<PertinentData>("/api/pertinentdata");
-    habitsCfg = api.get<HabitsConfig>("/api/habitscfg");
-    dailyData = api.get<DailyData>("/api/dailydata");
-  };
-  async function waitForStreaks() {
-    return await api.get<StreaksData>("/api/streaksdata");
+  const { authState } = useAuth();
+  if (authState.isAuthenticated) {
+    async function waitForStreaks() {
+      return await api.get<StreaksData>("/api/streaksdata");
+    }
+    async function waitForLog() {
+      return await api.get<DailyLog>("/api/getlog");
+    }
+    async function waitForDailyData() {
+      return await api.get<DailyData>("/api/dailydata");
+    }
+    async function waitForPertinentData() {
+      return await api.get<PertinentData>("/api/pertinentdata");
+    }
+    async function saveLog(dl: DailyLog) {
+      return await api.post<StreaksData>("/api/savelog", dl);
+    }
+
+    return (
+      <ContentContext.Provider
+        value={{
+          waitForStreaks,
+          waitForDailyData,
+          waitForLog,
+          waitForPertinentData,
+          saveLog,
+        }}
+      >
+        {children}
+      </ContentContext.Provider>
+    );
+  } else {
+    return (
+      <ContentContext.Provider value={{}}>{children}</ContentContext.Provider>
+    );
   }
-  async function waitForLog() {
-    return await api.get<StreaksData>("/api/getlog");
-  }
-  return (
-    <ContentContext.Provider
-      value={{
-        streaks,
-        pertinentData,
-        habitsCfg,
-        dailyData,
-        refreshConfig,
-        waitForStreaks,
-        waitForLog,
-      }}
-    >
-      {children}
-    </ContentContext.Provider>
-  );
 };
 
 export const useContent = () => {

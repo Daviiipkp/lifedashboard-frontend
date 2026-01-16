@@ -2,8 +2,10 @@ import axios from "axios";
 import type { StreaksData } from "../types/general";
 import { useAuth } from "../contexts/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 export const api = axios.create({
-  baseURL: "http://192.168.0.9:8080", 
+  baseURL: API_URL, 
   timeout: 5000,
 });
 api.interceptors.request.use((config) => {
@@ -29,15 +31,3 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-export async function getStreaks() {
-    try {
-
-        const response = await api.get<StreaksData>("/api/streaksdata");
-
-        return response.data; 
-
-    } catch (error) {
-        console.error("ERROR: ", error);
-    }
-}

@@ -1,53 +1,37 @@
 import { useEffect, useState } from "react";
-import Clock from "../components/Clock";
 import { NavigationBar } from "../components/NavigationBar";
-import Streak from "../components/Streak";
 import { useAuth } from "../contexts/AuthContext";
 import {
-  Calendar,
-  FlameIcon,
+  BookCheck,
+  BookIcon,
+  GlassesIcon,
   GlassWaterIcon,
-  GoalIcon,
   LogsIcon,
-  PencilLine,
+  PhoneIcon,
+  PhoneOffIcon,
   SunMedium,
 } from "lucide-react";
-import { api, getStreaks } from "../services/api";
-import type { DailyLog, StreaksData } from "../types/general";
-import { useNavigate } from "react-router-dom";
-import { useError } from "./error";
+import type { DailyLog } from "../types/general";
+import { ErrorPage, useError } from "./error";
 import { LoadingPage } from "./loading";
-import { IoAnalytics, IoAnalyticsSharp } from "react-icons/io5";
-import { GiGymBag, GiHamShank, GiObservatory } from "react-icons/gi";
-import { BiDownArrow } from "react-icons/bi";
-import { RiInputMethodLine } from "react-icons/ri";
+import { GiGymBag, GiHamShank, GiOfficeChair } from "react-icons/gi";
 import { useContent } from "../contexts/ContentContext";
 import { LogComponent } from "../components/LogComponent";
 import { FcMindMap } from "react-icons/fc";
-
-function sendLog(log: DailyLog) {
-  const { handleError } = useError();
-
-  try {
-  } catch (error) {
-    handleError(error);
-  }
-}
+import { SiStudyverse } from "react-icons/si";
+import { HiOfficeBuilding } from "react-icons/hi";
 
 export function Log() {
-  const { authState, setLoading } = useAuth();
-  const user = authState.user;
   const { handleError } = useError();
 
-  const [planning, setPlanning] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<"saved" | "unsaved" | "saving">(
-    "saved"
-  );
-
   const [logData, setLogData] = useState<DailyLog | null>(null);
+  const [saving, setSaving] = useState(false);
 
-  const { waitForLog } = useContent();
+  const { waitForLog, saveLog } = useContent();
+
+  if (!waitForLog || !saveLog) {
+    return <ErrorPage />;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,6 +45,25 @@ export function Log() {
     };
     fetchData();
   }, []);
+
+  const handleUpdateLog = (field: keyof DailyLog, value: number | boolean) => {
+    setLogData((prev) => {
+      if (!prev) return null;
+      return { ...prev, [field]: value };
+    });
+  };
+
+  const saveLogData = async () => {
+    if (!logData) return;
+    try {
+      setSaving(true);
+      await saveLog(logData);
+      setSaving(false);
+    } catch (error) {
+      setSaving(false);
+      handleError(error);
+    }
+  };
 
   if (logData == null) {
     return <LoadingPage />;
@@ -76,99 +79,174 @@ export function Log() {
               <div className="glass-card p-10 flex flex-col rounded-2xl overflow-hidden bg-black h-full w-full">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2 mb-5">
                   <LogsIcon size={16} className="text-amber-500" />
-                  <h3 className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
+                  <span className="text-[12px] font-black uppercase tracking-[0.2em] text-slate-400">
                     Log your activity
-                  </h3>
+                  </span>
                 </h3>
-                {/* start stuff */}
-                <div className="flex gap-5">
-                  <div className="w-1/4 items-center flex flex-col gap-5 h-11/12">
+
+                <div className="flex gap-5 w-full h-full">
+                  {/**/}
+                  <div className="w-2/4 items-center flex flex-col gap-5 h-11/12">
                     <h1 className="text-[10px] text-center font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
                       Biological Telemetry
                     </h1>
-                    <div className="flex w-full gap-2">
-                      <div className="h-full bg-amber-100/20 w-0.5" />
-                      <div className="gap-5 w-full flex flex-col h-full">
+                    <div className="flex w-full gap-2 h-full">
+                      <div className="w-full flex flex-col h-full justify-evenly gap-4">
+                        {/* WATER */}
                         <LogComponent
                           intaked={logData.waterIntake?.valueOf() || 0}
                           goal={2000}
-                          icon={
-                            <GlassWaterIcon
-                              size={16}
-                              className="text-blue-500"
-                            />
-                          }
+                          icon={<GlassWaterIcon size={16} />}
                           name="Water Intake"
                           inputType="slider"
                           unit="ml"
+                          onUpdate={(val) =>
+                            handleUpdateLog("waterIntake", val as number)
+                          }
                         />
+
+                        {/* MEALS */}
                         <LogComponent
                           intaked={logData.meals?.valueOf() || 0}
                           goal={5}
-                          icon={
-                            <GiHamShank size={16} className="text-yellow-600" />
-                          }
+                          icon={<GiHamShank size={16} />}
                           name="Food Intake"
-                          inputType="button"
-                          unit=" meals"
+                          inputType="stepper"
+                          unit="meals"
+                          onUpdate={(val) =>
+                            handleUpdateLog("meals", val as number)
+                          }
                         />
+
+                        {/* SLEEP*/}
                         <LogComponent
                           intaked={logData.sleepTime?.valueOf() || 0}
                           goal={8}
-                          icon={
-                            <GlassWaterIcon
-                              size={16}
-                              className="text-purple-600"
-                            />
+                          icon={<GlassWaterIcon size={16} />}
+                          name="Hours Slept"
+                          inputType="stepper"
+                          unit="h"
+                          onUpdate={(val) =>
+                            handleUpdateLog("sleepTime", val as number)
                           }
-                          name="Hours of sleep"
-                          inputType="slider"
-                          unit=" hours"
                         />
                       </div>
-                    </div>
-                  </div>
-                  {/*  */}
-                  {/*  */}
-                  {/*  */}
-                  <div className="w-1/4 items-center flex flex-col gap-5 h-11/12">
-                    <h1 className="text-[10px] text-center font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
-                      Logistics telemetry
-                    </h1>
-                    <div className="flex w-full gap-2">
-                      <div className="gap-5 w-full flex flex-col h-full">
+
+                      <div className="w-full flex flex-col h-full justify-evenly gap-4">
+                        {/* WAKE UP */}
                         <LogComponent
-                          intaked={logData.waterIntake?.valueOf() || 0}
-                          goal={2000}
-                          icon={
-                            <SunMedium size={16} className="text-yellow-500" />
-                          }
+                          intaked={logData.wakeUpTime?.valueOf() || 0}
+                          goal={6.5}
+                          icon={<SunMedium size={16} />}
                           name="Wake Up Time"
-                          inputType="slider"
-                          unit="hours"
+                          inputType="time"
+                          unit=""
+                          onUpdate={(val) =>
+                            handleUpdateLog("wakeUpTime", val as number)
+                          }
                         />
+
+                        {/* WORKOUT*/}
                         <LogComponent
-                          intaked={logData.meals?.valueOf() || 0}
-                          goal={5}
-                          icon={<GiGymBag size={16} className="text-red-400" />}
+                          intaked={logData.workedOut?.valueOf() || false}
+                          goal={1}
+                          icon={<GiGymBag size={16} />}
                           name="Worked Out"
                           inputType="checkbox"
-                          unit=" meals"
-                        />
-                        <LogComponent
-                          intaked={logData.sleepTime?.valueOf() || 0}
-                          goal={10}
-                          icon={
-                            <FcMindMap size={16} className="text-purple-600" />
+                          unit=""
+                          onUpdate={(val) =>
+                            handleUpdateLog("workedOut", !!val)
                           }
+                        />
+
+                        {/* FOCUS LEVEL */}
+                        <LogComponent
+                          intaked={logData.focusLevel?.valueOf() || 0}
+                          goal={10}
+                          icon={<FcMindMap size={16} />}
                           name="Focus Level"
                           inputType="slider"
-                          unit=""
+                          unit="/10"
+                          onUpdate={(val) =>
+                            handleUpdateLog("focusLevel", val as number)
+                          }
                         />
                       </div>
-                      <div className="h-full bg-amber-100/20 w-0.5" />
                     </div>
+                    {/**/}
                   </div>
+                  {/*                  {/**                        */}
+
+                  <div className="h-full bg-amber-100/10 w-0.5" />
+                  <div className="w-2/4 items-center flex flex-col gap-5 h-11/12">
+                    <h1 className="text-[10px] text-center font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
+                      Logistics Telemetry
+                    </h1>
+                    <div className="flex w-full h-full">
+                      <div className="w-full flex flex-col h-full justify-between gap-4">
+                        <div className="w-full flex justify-evenly h-full gap-2">
+                          {/* READING */}
+                          <LogComponent
+                            intaked={logData.reading?.valueOf() || 0}
+                            goal={30}
+                            icon={<BookIcon size={16} />}
+                            name="Reading Pages"
+                            inputType="slider"
+                            unit="pages"
+                            onUpdate={(val) =>
+                              handleUpdateLog("reading", val as number)
+                            }
+                          />
+
+                          {/* STUDYING */}
+                          <LogComponent
+                            intaked={logData.studying?.valueOf() || 0}
+                            goal={30}
+                            icon={<SiStudyverse size={16} />}
+                            name="Studying Time"
+                            inputType="slider"
+                            unit="minutes"
+                            onUpdate={(val) =>
+                              handleUpdateLog("studying", val as number)
+                            }
+                          />
+                        </div>
+                        {/* WORKING */}
+                        <div className="w-full flex h-full justify-evenly gap-2">
+                          <LogComponent
+                            intaked={logData.working?.valueOf() || 0}
+                            goal={8}
+                            icon={<HiOfficeBuilding size={16} />}
+                            name="Working Time"
+                            inputType="slider"
+                            unit="hours"
+                            onUpdate={(val) => handleUpdateLog("working", val)}
+                          />
+                        </div>
+
+                        {/* DETOX */}
+                        <div className="w-full flex h-full justify-evenly gap-2">
+                          <LogComponent
+                            intaked={logData.detox?.valueOf() || false}
+                            goal={1}
+                            icon={<PhoneOffIcon size={16} />}
+                            name="Social Media Detox"
+                            inputType="checkbox"
+                            unit=""
+                            onUpdate={(val) => handleUpdateLog("detox", val)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    {/**/}
+                  </div>
+                  <button
+                    onClick={saveLogData}
+                    disabled={saving}
+                    className="bg-linear-to-b from-slate-500 to-slate-400 hover:to-slate-700 hover:from-slate-600 transition-colors duration-300 absolute right-20 bottom-15 rounded-2xl text-slate-900 font-bold py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {saving ? "Saving..." : "Save changes"}
+                  </button>
                 </div>
               </div>
             </div>

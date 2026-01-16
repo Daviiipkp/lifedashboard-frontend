@@ -62,23 +62,19 @@ export function NavigationBar() {
     const handleResize = () => {
       const isNowMobile = isMobileView();
 
-      // 2. Atualiza o estado. Isso força o React a renderizar a tela de novo.
       setIsMobile(isNowMobile);
 
-      // Lógica antiga: se virou desktop, fecha o menu lateral
       if (!isNowMobile) {
         setMobileNavOpen(false);
       }
     };
 
-    // 3. Adiciona o ouvinte
     window.addEventListener("resize", handleResize);
 
-    // 4. Limpa o ouvinte
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []); // Array vazio = roda apenas na montagem
+  }, []);
 
   return (
     <nav className="bg-black top-10/12 rounded-4xl max-w-8/12 w-6/12 m-2 max-h-fit">
@@ -103,7 +99,6 @@ export function NavigationBar() {
               ) : mobileNavOpen ? (
                 <div className="relative top-30 z-50 flex flex-col items-center gap-2 bg-black/90 backdrop-blur-xl border border-white/10 p-3 rounded-2xl shadow-xl min-w-[60px]">
                   {getRedirectionWidget("/profile", <User size={20} />)}
-                  {/* Separador Horizontal */}
                   <div className="h-px w-full bg-white/10 my-1" />
 
                   {getRedirectionWidget("/log", <Target size={20} />)}
@@ -116,7 +111,6 @@ export function NavigationBar() {
 
                   <div className="h-px w-full bg-red-500/20 my-1" />
 
-                  {/* Botão de fechar dentro do menu */}
                   <div
                     onClick={() => setMobileNavOpen(false)}
                     className="cursor-pointer text-red-400"
