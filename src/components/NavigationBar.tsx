@@ -21,7 +21,7 @@ function getRedirectionWidget(
   name: string,
   icon: React.ReactNode,
   mobileNavOpen?: boolean,
-  setMobileNavOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  setMobileNavOpen?: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
@@ -123,7 +123,7 @@ export function NavigationBar() {
                   "navBarOpener",
                   <Menu size={24} />,
                   mobileNavOpen,
-                  setMobileNavOpen
+                  setMobileNavOpen,
                 )
               )
             ) : (

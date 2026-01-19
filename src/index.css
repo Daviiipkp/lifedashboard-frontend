@@ -15,14 +15,12 @@ body {
 }
 
 @layer utilities {
-  /* Esconde a barra no Chrome, Safari e Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
-  /* Esconde a barra no Firefox, IE e Edge */
   .no-scrollbar {
-    -ms-overflow-style: none;  /* IE e Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

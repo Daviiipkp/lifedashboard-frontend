@@ -23,7 +23,7 @@ const Calendarr = ({ daysData }: Gridprops) => {
           <div
             key={index}
             className={`aspect-square rounded-sm ${getLevel(
-              level
+              level,
             )} transition-colors hover:border grid place-items-center hover:border-white/20`}
             title={`Level: ${level}`}
           >
@@ -38,7 +38,7 @@ const Calendarr = ({ daysData }: Gridprops) => {
             <h1 className="text-center text-[12px] font-bold ">
               Day {index + 1} was a 5 star day!
             </h1>
-          ) : null
+          ) : null,
         )}
       </div>
     </div>

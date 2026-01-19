@@ -36,9 +36,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         storagedToken !== "null" &&
         storagedUser !== "null"
       ) {
-        api.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${storagedToken}`;
+        api.defaults.headers.common["Authorization"] =
+          `Bearer ${storagedToken}`;
         setAuthState({
           isAuthenticated: true,
           user: JSON.parse(storagedUser),

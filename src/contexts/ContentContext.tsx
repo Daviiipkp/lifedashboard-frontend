@@ -68,7 +68,7 @@ export const useContent = () => {
 
   if (!context) {
     throw new Error(
-      "useContent should be used inside scope of ContentProvider"
+      "useContent should be used inside scope of ContentProvider",
     );
   }
 

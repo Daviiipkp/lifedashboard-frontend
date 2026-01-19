@@ -41,7 +41,7 @@ function getHalfStreaks(strData?: StreaksData, second?: boolean) {
     }
     return strData?.streaks.slice(
       strData?.streaks.length / 2,
-      strData?.streaks.length
+      strData?.streaks.length,
     );
     //
   } catch (error) {
@@ -70,14 +70,14 @@ export function Dashboard() {
   const [streakData, setStreakData] = useState<StreaksData | null>(null);
   const [dailyData, setDailyData] = useState<DailyData | null>(null);
   const [pertinentData, setPertinentData] = useState<PertinentData | null>(
-    null
+    null,
   );
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const handleGoalChange = (
     index: number,
     field: keyof Goal,
-    value: string | number
+    value: string | number,
   ) => {
     setTempGoals((prev) => {
       if (!prev.goals) return prev;
@@ -223,7 +223,7 @@ export function Dashboard() {
                                   handleGoalChange(
                                     index,
                                     "name",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 className="w-full rounded bg-zinc-800 p-2 text-sm text-white outline-none focus:ring-1 focus:ring-emerald-500 placeholder:text-zinc-600"
@@ -242,7 +242,7 @@ export function Dashboard() {
                                   handleGoalChange(
                                     index,
                                     "target",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 className="w-full rounded bg-zinc-800 p-2 text-sm text-white outline-none focus:ring-1 focus:ring-emerald-500 placeholder:text-zinc-600"
@@ -261,7 +261,7 @@ export function Dashboard() {
                                   handleGoalChange(
                                     index,
                                     "unit",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                                 className="w-full rounded bg-zinc-800 p-2 text-sm text-white outline-none focus:ring-1 focus:ring-emerald-500 placeholder:text-zinc-600"
@@ -279,7 +279,7 @@ export function Dashboard() {
                                   handleGoalChange(
                                     index,
                                     "progress",
-                                    Number(e.target.value)
+                                    Number(e.target.value),
                                   )
                                 }
                                 className="w-full rounded bg-zinc-800 p-2 text-sm text-white outline-none focus:ring-1 focus:ring-emerald-500"
@@ -386,7 +386,7 @@ export function Dashboard() {
                             count={streak.count}
                             completedToday={streak.completedToday}
                           />
-                        )
+                        ),
                       )}
                     </div>
                   </div>

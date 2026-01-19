@@ -208,7 +208,7 @@ const ProgressiveStreakWidget = ({
       const isMilestone = milestones.includes(count);
 
       setIgnitionClass(
-        isMilestone ? "animate-milestone-pop" : "animate-ignition"
+        isMilestone ? "animate-milestone-pop" : "animate-ignition",
       );
       const timer = setTimeout(() => setIgnitionClass(""), 1000);
       return () => clearTimeout(timer);
@@ -238,7 +238,7 @@ const ProgressiveStreakWidget = ({
         <div
           className={`absolute inset-0 rounded-xl opacity-40 blur-lg transition-all duration-500 group-hover:opacity-70 ${currentTheme.shadow.replace(
             "shadow-",
-            "bg-"
+            "bg-",
           )}`}
         />
       )}

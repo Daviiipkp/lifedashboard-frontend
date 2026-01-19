@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { api } from "../services/api"; 
+import { api } from "../services/api";
 
 export function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -17,9 +17,9 @@ export function VerifyEmail() {
 
     async function verify() {
       try {
-        await api.post("/auth/verify", { token }); 
+        await api.post("/auth/verify", { token });
         setStatus("Email verificado com sucesso! Redirecionando...");
-        
+
         setTimeout(() => navigate("/"), 2000);
       } catch (error) {
         setStatus("Falha na verificação. O link pode ter expirado.");
