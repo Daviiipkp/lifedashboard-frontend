@@ -131,6 +131,7 @@ export function Login() {
             <FaGithub className="text-lg md:text-4xl" />
           </div>
         </div> */}
+        <h1 className="text-red-500">disabled temporarily</h1>
       </div>
     </div>
   );
