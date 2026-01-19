@@ -120,7 +120,7 @@ export function Login() {
           <div className="w-1/2 h-0.5 bg-gray-600"></div>
         </div>
 
-        <div className="relative w-70 pt-5 flex items-center justify-between py-3">
+        {/* <div className="relative w-70 pt-5 flex items-center justify-between py-3">
           <div className="p-2 md:px10 bg-slate-600 cursor-pointer rounded-2xl hover:bg-slate-800">
             <FaGoogle className="text-lg md:text-4xl" />
           </div>
@@ -130,7 +130,7 @@ export function Login() {
           <div className="p-2 md:px10 bg-slate-600 cursor-pointer rounded-2xl hover:bg-slate-800">
             <FaGithub className="text-lg md:text-4xl" />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
