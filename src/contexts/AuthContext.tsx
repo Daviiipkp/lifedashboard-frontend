@@ -50,41 +50,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function login(credentials: LoginCredentials) {
-    try {
-      const response = await authService.login(credentials);
+    const response = await authService.login(credentials);
 
-      localStorage.setItem("@Aequo:token", response.token || "");
-      localStorage.setItem("@Aequo:user", JSON.stringify(response.user));
+    localStorage.setItem("@Aequo:token", response.token || "");
+    localStorage.setItem("@Aequo:user", JSON.stringify(response.user));
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${response.token}`;
+    api.defaults.headers.common["Authorization"] = `Bearer ${response.token}`;
 
-      setAuthState({
-        isAuthenticated: true,
-        user: response.user,
-        token: response.token,
-      });
-    } catch (error) {
-      throw error;
-    }
+    setAuthState({
+      isAuthenticated: true,
+      user: response.user,
+      token: response.token,
+    });
   }
 
   async function register(credentials: RegisterCredentials) {
-    try {
-      const response = await authService.register(credentials);
+    const response = await authService.register(credentials);
 
-      localStorage.setItem("@Aequo:token", response.token || "");
-      localStorage.setItem("@Aequo:user", JSON.stringify(response.user));
+    localStorage.setItem("@Aequo:token", response.token || "");
+    localStorage.setItem("@Aequo:user", JSON.stringify(response.user));
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${response.token}`;
+    api.defaults.headers.common["Authorization"] = `Bearer ${response.token}`;
 
-      setAuthState({
-        isAuthenticated: true,
-        user: response.user,
-        token: response.token,
-      });
-    } catch (error) {
-      throw error;
-    }
+    setAuthState({
+      isAuthenticated: true,
+      user: response.user,
+      token: response.token,
+    });
+    window.location.href = "/dashboard";
   }
 
   function logout() {

@@ -46,6 +46,14 @@ export interface PertinentData {
     config: HabitsConfig
 }
 
+export interface StreakColors {
+    main: "text-green-300",
+    outline: "border-green-500/60",
+    text: "text-green-500",
+    shadow: string,
+    gradient: "from-green-950/50 to-stone-950",
+}
+
 export interface StreaksData {
     streaks: StreakWidgetProps[];
 }

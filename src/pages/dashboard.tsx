@@ -358,7 +358,7 @@ export function Dashboard() {
                   )}
                 </div>
               </div>
-
+              {/* STREAKS PART */}
               <div className="flex w-fit gap-3 bg-black p-3 max-h-full overflow-hidden rounded-xl">
                 <div className="w-px h-7xl bg-slate-600 dark:bg-white/10 mx-1" />
                 <div className="flex-col flex flex-1 overflow-auto no-scrollbar max-h-full">
@@ -374,6 +374,7 @@ export function Dashboard() {
                           type={streak.type}
                           count={streak.count}
                           completedToday={true}
+                          currentTheme={streak.currentTheme}
                         />
                       ))}
                     </div>
@@ -385,6 +386,7 @@ export function Dashboard() {
                             type={streak.type}
                             count={streak.count}
                             completedToday={streak.completedToday}
+                            currentTheme={streak.currentTheme}
                           />
                         ),
                       )}

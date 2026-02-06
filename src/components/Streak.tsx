@@ -1,141 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-
-export type DefaultStreak =
-  | "sleep"
-  | "wakeUpTime"
-  | "workedOut"
-  | "focus"
-  | "water"
-  | "reading"
-  | "studying"
-  | "meals"
-  | "detox"
-  | "planning"
-  | "leetCodeSolved"
-  | "duoSolved";
+import type { StreakColors } from "../types/general";
+import { Icon } from "lucide-react";
 
 export interface StreakWidgetProps {
-  type: DefaultStreak | string;
+  type: string;
   count: number;
   completedToday: boolean;
-  customThemeColor?: string;
+  currentTheme: StreakColors;
 }
-
-const ICONS: Record<string, React.ReactNode> = {
-  sleep: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
-  wakeUpTime: (
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-  ),
-  workedOut: (
-    <path d="M6.5 6.5l11 11M21 21l-1-1M3 3l1 1M18 6L6 18M21 3l-1 1M3 21l1-1" />
-  ),
-  focus: <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />,
-  water: <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />,
-  reading: (
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-  ),
-  studying: <path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5" />,
-  meals: (
-    <path d="M18 8c0 4.4-3.6 8-8 8s-8-3.6-8-8 8-8 8 8zm0 0c0-4.4 3.6-8 8-8v8h-8z" />
-  ),
-  detox: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
-  planning: (
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-  ),
-  leetCodeSolved: <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />,
-  duoSolved: (
-    <path d="M12 2a5 5 0 0 0-5 5v2a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z M8 14v4a4 4 0 0 0 8 0v-4" />
-  ),
-  default: <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />,
-};
-
-type ThemeConfig = {
-  primary: string;
-  secondary: string;
-  border: string;
-  shadow: string;
-  gradient: string;
-};
-
-const STREAK_THEMES: Record<string, ThemeConfig> = {
-  sleep: {
-    primary: "text-indigo-200",
-    secondary: "text-indigo-400",
-    border: "border-indigo-500/50",
-    shadow: "shadow-indigo-500/40",
-    gradient: "from-indigo-950/50 to-stone-950",
-  },
-  wakeUpTime: {
-    primary: "text-amber-100",
-    secondary: "text-amber-300",
-    border: "border-amber-400/60",
-    shadow: "shadow-amber-400/40",
-    gradient: "from-amber-950/50 to-stone-950",
-  },
-  workedOut: {
-    primary: "text-rose-200",
-    secondary: "text-rose-400",
-    border: "border-rose-500/60",
-    shadow: "shadow-rose-500/50",
-    gradient: "from-rose-950/50 to-stone-950",
-  },
-  focus: {
-    primary: "text-cyan-100",
-    secondary: "text-cyan-300",
-    border: "border-cyan-400/60",
-    shadow: "shadow-cyan-400/40",
-    gradient: "from-cyan-950/50 to-stone-950",
-  },
-  water: {
-    primary: "text-sky-200",
-    secondary: "text-sky-400",
-    border: "border-sky-500/50",
-    shadow: "shadow-sky-500/40",
-    gradient: "from-sky-950/50 to-stone-950",
-  },
-  reading: {
-    primary: "text-emerald-100",
-    secondary: "text-emerald-300",
-    border: "border-emerald-500/50",
-    shadow: "shadow-emerald-500/30",
-    gradient: "from-emerald-950/50 to-stone-950",
-  },
-  studying: {
-    primary: "text-violet-200",
-    secondary: "text-violet-400",
-    border: "border-violet-500/60",
-    shadow: "shadow-violet-500/40",
-    gradient: "from-violet-950/50 to-stone-950",
-  },
-  leetCodeSolved: {
-    primary: "text-yellow-200",
-    secondary: "text-yellow-500",
-    border: "border-yellow-500/60",
-    shadow: "shadow-yellow-500/40",
-    gradient: "from-yellow-950/50 to-stone-950",
-  },
-  duoSolved: {
-    primary: "text-green-300",
-    secondary: "text-green-500",
-    border: "border-green-500/60",
-    shadow: "shadow-green-500/40",
-    gradient: "from-green-950/50 to-stone-950",
-  },
-  default: {
-    primary: "text-stone-200",
-    secondary: "text-stone-400",
-    border: "border-stone-500/50",
-    shadow: "shadow-stone-500/20",
-    gradient: "from-stone-800/50 to-stone-950",
-  },
-  lost: {
-    primary: "text-stone-600",
-    secondary: "text-stone-700",
-    border: "border-stone-800",
-    shadow: "none",
-    gradient: "from-transparent to-stone-950",
-  },
-};
 
 type TierLabel =
   | "BEGINNER"
@@ -185,16 +57,11 @@ const ProgressiveStreakWidget = ({
   type,
   count,
   completedToday,
+  currentTheme,
 }: StreakWidgetProps) => {
   const isLost = count === 0;
   const isDormant = !isLost && !completedToday;
   const isActive = !isLost && completedToday;
-
-  const themeKey = STREAK_THEMES[type] ? type : "default";
-  const activeTheme = STREAK_THEMES[themeKey];
-  const lostTheme = STREAK_THEMES["lost"];
-
-  const currentTheme = isLost ? lostTheme : activeTheme;
 
   const tierLevel = getTierLevel(count);
   const tierConfig = TIER_LEVELS[tierLevel];
@@ -248,7 +115,7 @@ const ProgressiveStreakWidget = ({
           relative flex h-15 w-[165px] items-center justify-between rounded-xl border-2 px-3 py-2 
           transition-all duration-300 backdrop-blur-md z-10
           bg-gradient-to-b ${currentTheme.gradient}
-          ${currentTheme.border}
+          ${currentTheme.outline}
           
           /* Lógica de Estado (Active vs Dormant vs Lost) */
           ${isActive ? `shadow-lg ${currentTheme.shadow}` : "shadow-none"}
@@ -286,11 +153,11 @@ const ProgressiveStreakWidget = ({
               strokeWidth={isActive ? "1.5" : "1"}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={`h-4 w-4 transition-all ${currentTheme.primary} ${
+              className={`h-4 w-4 transition-all ${currentTheme.main} ${
                 isActive ? "drop-shadow-md" : ""
               }`}
             >
-              {ICONS[type] || ICONS["default"]}
+              {/*  CHGANGE THIS SHIT */}
             </svg>
           </div>
 
@@ -302,7 +169,7 @@ const ProgressiveStreakWidget = ({
             >
               {type.replace(/([A-Z])/g, " $1").trim()}
             </span>
-            <span className={`text-[9px] font-bold ${currentTheme.secondary}`}>
+            <span className={`text-[9px] font-bold ${currentTheme.text}`}>
               {isLost ? "Dormant" : tierConfig.label}
             </span>
           </div>
@@ -312,7 +179,7 @@ const ProgressiveStreakWidget = ({
           <span
             className={`
               font-mono text-2xl font-black leading-none tracking-tighter transition-all
-              ${currentTheme.primary}
+              ${currentTheme.main}
               ${isActive ? "drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" : ""}
             `}
           >
